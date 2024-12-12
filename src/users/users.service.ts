@@ -48,14 +48,14 @@ export class UsersService {
     return `This action returns all users`;
   }
 
-  findOne(id: string) {
+  async findOne(id: string) {
     if(!mongoose.Types.ObjectId.isValid(id))
       return "not found user";
 
-    return this.UserModel.findOne({
+    return await this.UserModel.findOne({
       _id: id
     }
-    )
+    ).select("-password") // exclude >< include
   }
   findOneByUsername(username: string) {
     // if(!mongoose.Types.ObjectId.isValid(email))
@@ -75,10 +75,10 @@ export class UsersService {
     return await this.UserModel.updateOne({_id :updateUserDto._id},{...updateUserDto})
   }
 
-  remove(id: string) {
+  async remove(id: string) {
     if(!mongoose.Types.ObjectId.isValid(id))
       return "not found user";
-
+   
     return this.UserModel.deleteOne({
       _id: id
     }
@@ -103,10 +103,22 @@ export class UsersService {
     })
     return newRegister;
   }
-  updateUserToken =async (refreshToken:string , _id:string)=>{
-    return await this.UserModel.updateOne({_id},
-      {
-        refreshToken
-      })
-  }
+
+  updateUserToken = async (refreshToken: string, _id: string) => {
+    const result = await this.UserModel.updateOne(
+      { _id }, // Điều kiện tìm kiếm
+      { refreshToken } // Giá trị cần cập nhật
+    );
+  
+    if (result.modifiedCount === 0) {
+      throw new Error('Failed to update refresh token'); // Ném lỗi nếu không cập nhật
+    }
+  
+    return result; // Trả về thông tin nếu cần
+  };
+  findUserByToken = async (refreshToken: string) => {
+    return await this.UserModel.findOne({
+      refreshToken
+    });
+  };
 }

@@ -72,6 +72,7 @@ export class CreateUserDto {
             message: 'Role không được để trống'
         }
     )
+    refreshToken:string;
 
     @IsNotEmptyObject()
     @IsObject()

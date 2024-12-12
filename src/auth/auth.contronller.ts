@@ -3,8 +3,10 @@ import { AuthService } from './auth.service';
 import { Public, ResponseMessage, User } from 'src/decorator/customize';
 import { LocalAuthGuard } from './local-auth.guard';
 import { RegisterUserDto } from 'src/users/dto/create-user.dto';
-import { Request,Response } from 'express';
+import { Request,response,Response } from 'express';
 import { IUser } from 'src/users/user.interface';
+import { JwtAuthGuard } from './jwt-auth.guard';
+import { request } from 'http';
 
 @Controller("auth")//route
 export class AuthController {
@@ -12,6 +14,7 @@ export class AuthController {
     private authService: AuthService,
   ) {}
 
+  
   @Public()
   @UseGuards(LocalAuthGuard)
   @Post('/login')
@@ -33,5 +36,24 @@ export class AuthController {
   @Get('/account')
   handleGetAccount(@User() user :IUser) { // req.user
     return {user};
+  }
+
+
+  @Public()
+  @ResponseMessage("Get User{{ refresh")
+  @Get('/refresh')
+  handleRefreshToken(@Req() request:Request,
+  @Res({passthrough:true}) response: Response ) { // req.user
+    // console.log("check cookie",request.cookies);
+    // const refreshToken = 4;
+    const refreshToken = request.cookies['refresh_token'];
+    return this.authService.processNewToken(refreshToken,response);
+  }
+
+  @ResponseMessage("logout")
+  @Post('/logout')
+  handleLogout(@User() user:IUser,
+  @Res({passthrough:true}) response: Response ) { // req.user
+    return this.authService.logout(response,user);
   }
 }

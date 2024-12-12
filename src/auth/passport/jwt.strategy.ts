@@ -1,6 +1,6 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 
 import { ConfigService } from '@nestjs/config';
 import { IUser } from 'src/users/user.interface';
@@ -12,16 +12,20 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), // lay token tu header
       ignoreExpiration: false,
-      secretOrKey: configService.get<string>("JWT_ACCESS_TOKEN")
+      secretOrKey : configService.get<string>("JWT_ACCESS_TOKEN")
     });
   }
 
   async validate(payload: IUser) {
+    try {
     const { _id, name, email, role } = payload; 
     // req.user
     return {
     _id, name, email, role
     };
+  } catch (error) {
+    throw new UnauthorizedException('Token validation failed');
+  }
     }
     
 }
