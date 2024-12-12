@@ -24,4 +24,11 @@ export class CreateCompanyDto {
     )
     description:string;
 
+    @IsNotEmpty(
+        {
+            message: 'Logo không được để trống'
+        }
+    )
+    logo:string;
+
 }

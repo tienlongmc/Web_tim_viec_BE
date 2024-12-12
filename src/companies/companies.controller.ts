@@ -3,7 +3,7 @@ import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 // import { Request } from 'express';
-import { ResponseMessage, User } from 'src/decorator/customize';
+import { Public,ResponseMessage, User } from 'src/decorator/customize';
 import { IUser } from 'src/users/user.interface';
 import { Company } from './schemas/company.schemas';
 
@@ -21,6 +21,7 @@ export class CompaniesController {
   //   return this.companiesService.findAll();
   // }
   @Get()
+  @Public()
   @ResponseMessage("Fetch list of companies with paginate")
   async findAll(
     @Query('page') page: number = 1, // Tham số trang
@@ -30,8 +31,9 @@ export class CompaniesController {
   }
 
   @Get(':id')
+  @Public()
   findOne(@Param('id') id: string) {
-    return this.companiesService.findOne(+id);
+    return this.companiesService.findOne(id);
   }
 
   @Patch(':id')

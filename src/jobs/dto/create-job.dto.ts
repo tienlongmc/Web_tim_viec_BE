@@ -44,6 +44,10 @@ export class CreateJobDto {
     @IsNotEmpty({message:"level khong duoc trong"})
     @IsString()
     level?: string;
+
+    @IsNotEmpty({message:"location khong duoc trong"})
+    @IsString()
+    location?: string;
   
     @IsNotEmpty({message:"description khong duoc trong"})
     @IsString()
