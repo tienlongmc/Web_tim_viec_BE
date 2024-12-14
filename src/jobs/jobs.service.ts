@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
 import { IUser } from 'src/users/user.interface';
@@ -95,5 +95,33 @@ async  remove(id: string,user:IUser) {
   // return this.JobModel.softDelete({_id:id})
 
   
+  }
+  async getJobs(skills:string[], location:string){
+      // Tạo bộ lọc động dựa trên đầu vào
+      const filter: any = {};
+
+      if (skills && skills.length > 0) {
+          filter.skills = { $all: skills }; // Kiểm tra các kỹ năng bắt buộc
+      }
+  
+      if (location) {
+          filter.location = { $regex: new RegExp(location, 'i') }; // So khớp location không phân biệt hoa thường
+      }
+  
+      // Nếu không có bất kỳ điều kiện nào
+      if (Object.keys(filter).length === 0) {
+          throw new BadRequestException('Please provide at least one search criteria: skills or location');
+      }
+  
+      // Lọc công việc dựa trên filter
+      const filteredJobs = await this.JobModel.find(filter).exec();
+  
+      // Nếu không tìm thấy công việc nào
+      if (filteredJobs.length === 0) {
+          throw new BadRequestException('No jobs found matching the criteria');
+      }
+  
+      // Trả về danh sách công việc phù hợp
+      return filteredJobs;
   }
 }

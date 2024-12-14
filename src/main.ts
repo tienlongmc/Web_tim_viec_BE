@@ -20,7 +20,7 @@ async function bootstrap() {
   app.setBaseViewsDir(join(__dirname, '..', 'view'));// view 
 
   app.setViewEngine('ejs');
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({whitelist:true}));
 
   //config cookie
   // app.use(cookieParser());

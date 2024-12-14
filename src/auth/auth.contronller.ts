@@ -8,11 +8,13 @@ import { RegisterUserDto } from 'src/users/dto/create-user.dto';
 import { IUser } from 'src/users/user.interface';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { request } from 'http';
+import { RolesService } from 'src/roles/roles.service';
 
 @Controller("auth")//route
 export class AuthController {
   constructor(
     private authService: AuthService,
+    private roleService: RolesService
   ) {}
 
   
@@ -35,7 +37,9 @@ export class AuthController {
 
   @ResponseMessage("Get User information")
   @Get('/account')
-  handleGetAccount(@User() user :IUser) { // req.user
+  async handleGetAccount(@User() user :IUser) { // req.user
+    const temp = await this.roleService.findOne(user.role._id) as any;
+    user.permissions = temp.permissions;
     return {user};
   }
 

@@ -14,6 +14,10 @@ import { ResumesModule } from './resumes/resumes.module';
 import { PermissionsModule } from './permissions/permissions.module';
 import { RolesModule } from './roles/roles.module';
 import { DatabasesModule } from './databases/databases.module';
+import { MailModule } from './mail/mail.module';
+import { connect } from 'http2';
+import { connection } from 'mongoose';
+import { softDeletePlugin } from 'soft-delete-plugin-mongoose';
 
 @Module({
   imports: [
@@ -21,6 +25,10 @@ import { DatabasesModule } from './databases/databases.module';
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         uri: configService.get<string>('MONGODB_URI'),
+        connectionFactory:(connection)=>{
+          connection.plugin(softDeletePlugin);
+          return connection;
+        }
       }),
       inject: [ConfigService],
     }),
@@ -35,7 +43,8 @@ import { DatabasesModule } from './databases/databases.module';
     ResumesModule,
     PermissionsModule,
     RolesModule,
-    DatabasesModule
+    DatabasesModule,
+    MailModule
   ],
   controllers: [AppController],
   providers: [AppService,

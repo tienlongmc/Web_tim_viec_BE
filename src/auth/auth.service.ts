@@ -6,6 +6,8 @@ import { RegisterUserDto } from 'src/users/dto/create-user.dto';
 import { ConfigService } from '@nestjs/config';
 import ms from 'ms';
 import { Response } from 'express';
+import { RolesService } from 'src/roles/roles.service';
+import { Permission } from 'src/permissions/schema/permission.schema';
 
 @Injectable()
 export class AuthService {
@@ -13,7 +15,8 @@ export class AuthService {
     constructor(
         private usersService: UsersService,
         private jwtService: JwtService, 
-        private configService: ConfigService
+        private configService: ConfigService,
+        private rolesService:RolesService
     ) {}
 
 
@@ -23,15 +26,23 @@ export class AuthService {
         
         if(user){
             const isValid = this.usersService.IsValidPassword(pass,user.password);
-            if (isValid === true) {  // Chỉ cần kiểm tra isValid
-                return user;
+            if (isValid === true) {
+                  // Chỉ cần kiểm tra isValid
+                  const userRole = user.role as unknown as { _id: string, name: string };
+                  const temp = await this.rolesService.findOne(userRole._id);
+                   const objUser = {
+                    ...user.toObject(),
+                    permissions: temp?.permissions??[]
+                  }
+
+                return objUser;
             }
         }
         return null;
       }
 
     async login(user: IUser,response: Response) {
-        const { _id, name, email, role } = user; 
+        const { _id, name, email, role,permissions } = user; 
         const payload = {
         sub: "token login",
         iss: "from server",
@@ -51,7 +62,7 @@ export class AuthService {
                 access_token: this.jwtService.sign(payload),
                 refreshToken,
                   user: {
-                            _id, name, email, role
+                            _id, name, email, role,permissions
                          }     
         // }
         };
@@ -87,6 +98,10 @@ export class AuthService {
                 };
                 const refreshToken = this.createRefreshToken(payload);
                 await this.usersService.updateUserToken(refreshToken, _id.toString())
+
+                const userRole = user.role as unknown as { _id: string, name: string };
+                  const temp = await this.rolesService.findOne(userRole._id);
+
                 response.clearCookie('refresh_token');
                 // set refreshtoken as cookies để server đọc được thôi
                 response.cookie('refresh_token', refreshToken,{
@@ -96,7 +111,7 @@ export class AuthService {
                 return {
                     access_token: this.jwtService.sign(payload),
                     user: {
-                        _id, name, email, role
+                        _id, name, email, role,permission:temp?.permissions??[]
                     }
                 };
             }
