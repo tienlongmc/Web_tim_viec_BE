@@ -24,10 +24,11 @@ export class CompaniesController {
   @Public()
   @ResponseMessage("Fetch list of companies with paginate")
   async findAll(
-    @Query('page') page: number = 1, // Tham số trang
-    @Query('limit') limit: number = 2 // Tham số giới hạn tài liệu
-  ): Promise<{ data: Company[], total: number }> {
-    return this.companiesService.findAll(page, limit);
+    @Query('page') currentPage: number, // Tham số trang
+    @Query('limit') limit: number,  // Tham số giới hạn tài liệu
+    @Query() qs:string
+  ){
+    return this.companiesService.findAll(currentPage, limit,qs);
   }
 
   @Get(':id')

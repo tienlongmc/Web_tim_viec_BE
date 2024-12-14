@@ -6,6 +6,7 @@ import { Company, CompanyDocument } from './schemas/company.schemas';
 import { IUser } from 'src/users/user.interface';
 import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import mongoose from 'mongoose';
+import aqp from 'api-query-params';
 
 @Injectable()
 export class CompaniesService {
@@ -24,14 +25,31 @@ export class CompaniesService {
     });
   }
 
-  async findAll(page: number = 1, limit: number = 2): Promise<{ data: Company[], total: number ,totalPages: number  }> {
-    const skip = (page - 1) * limit; // Tính toán số lượng tài liệu cần bỏ qua
-    const total = await this.companyModel.countDocuments({ isDeleted: false }); // Tổng số tài liệu chưa bị xóa mềm
-    const totalPages = Math.ceil(total / limit);
-    const companies = await this.companyModel.find({ isDeleted: false }).skip(skip).limit(limit); // Lấy dữ liệu
+  async findAll(page: number, limit: number,qs:string) {
+    const{filter,sort,population} = aqp(qs)
+    delete filter.current;
+    delete filter.pageSize;
+    let offset = (+page - 1) * (+limit);
+    let defaultLimit = +limit ? +limit : 10;
+    const totalItems = (await this.companyModel.find(filter)).length;
+    const totalPages = Math.ceil(totalItems / limit);
+    const result = await this.companyModel.find(filter)
+    .skip(offset)
+    .limit(defaultLimit)
+    .sort(sort as any)
+    .populate(population)
+    .exec(); 
 
-    return { data: companies, total, totalPages }; // Trả về dữ liệu và tổng số tài liệu
-  }
+    return {
+      meta :{
+        current:page,
+        pageSize:limit,
+        pages:totalPages,
+        total:totalItems
+      },
+      result
+      }
+    }
 
   async findOne(id: string) {
    if(!mongoose.Types.ObjectId.isValid(id)){
