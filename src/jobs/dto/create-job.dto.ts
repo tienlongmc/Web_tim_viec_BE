@@ -9,6 +9,9 @@ class CompanyDto {
   
     @IsString()
     name: string;
+
+    @IsNotEmpty()
+    logo:string;
   }
   
   class UserDto {
@@ -25,13 +28,13 @@ export class CreateJobDto {
     @IsNotEmpty({message:"skill khong duoc trong"})
     @IsArray({message:"địng dạng là array"})
     @IsString({ each: true ,message:"phải là string"})
-    skills?: string[];
+    skills: string[];
   
     @IsNotEmptyObject()
     @IsObject()
     @ValidateNested()
     @Type(() => CompanyDto)
-    company?: CompanyDto;
+    company: CompanyDto;
   
     @IsNotEmpty({message:"salary khong duoc trong"})
     @IsNumber()

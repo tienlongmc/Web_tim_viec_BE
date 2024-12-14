@@ -8,6 +8,7 @@ import mongoose, { Model, Mongoose } from 'mongoose';
 import {genSaltSync,hashSync,compare, compareSync} from 'bcryptjs'
 import { IUser } from './user.interface';
 import { use } from 'passport';
+import aqp from 'api-query-params';
 
 
 @Injectable()
@@ -44,8 +45,32 @@ export class UsersService {
     return newUser;
   }
 
-  findAll() {
-    return `This action returns all users`;
+   async findAll(currenPage:number,limit:number,qs:string) {
+   const {filter,sort,population} = aqp(qs);
+   delete filter.current;
+   delete filter.pageSize;
+
+   let offset = (+currenPage -1) * (+limit);
+   let defaultLimit = +limit ? +limit : 10;
+   const totalItems = (await this.UserModel.find(filter)).length;
+   const totalPages = Math.ceil(totalItems / defaultLimit);
+
+   const result = await this.UserModel.find(filter)
+   .skip(offset)
+   .limit(defaultLimit)
+   .sort(sort as any)
+   .populate(population)
+   .select("-password") // exclude >< include
+   .exec();
+   return{
+    meta:{
+      current:currenPage,
+      pageSize:limit,
+      pages:totalPages,
+      total:totalItems
+    },
+    result
+   }
   }
 
   async findOne(id: string) {
@@ -55,7 +80,11 @@ export class UsersService {
     return await this.UserModel.findOne({
       _id: id
     }
-    ).select("-password") // exclude >< include
+    ).select("-password")
+    .populate({
+      path:"role",
+      select:{name:1,_id:1}
+    }) // exclude >< include
   }
   findOneByUsername(username: string) {
     // if(!mongoose.Types.ObjectId.isValid(email))
@@ -64,7 +93,10 @@ export class UsersService {
     return this.UserModel.findOne({
       email: username
     }
-    )
+    ).populate({
+      path:"role",
+      select:{name:1,permissions:1}
+    })
   }
 
   IsValidPassword(password:string, hash:string){
@@ -76,9 +108,21 @@ export class UsersService {
   }
 
   async remove(id: string) {
+    //
     if(!mongoose.Types.ObjectId.isValid(id))
       return "not found user";
-   
+    const foundUser = await this.UserModel.findOne({
+      _id: id
+    })
+    if(foundUser.email ==="decoretor@gmail.com"){
+        throw new BadRequestException("khong the xoa tai khoan admin")
+    } 
+   await this.UserModel.updateOne(
+      {_id:id},
+      {
+        deletedAt: new Date()
+      }
+    )
     return this.UserModel.deleteOne({
       _id: id
     }

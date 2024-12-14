@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Render, UseGuards, Body, Res, Req } from '@nestjs/common';
+import { Controller, Get, Post, Render, UseGuards, Body, Res, Req, UnauthorizedException } from '@nestjs/common';
+import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { Public, ResponseMessage, User } from 'src/decorator/customize';
 import { LocalAuthGuard } from './local-auth.guard';
 import { RegisterUserDto } from 'src/users/dto/create-user.dto';
-import { Request,response,Response } from 'express';
+// import { Request,response,Response } from 'express';
 import { IUser } from 'src/users/user.interface';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { request } from 'http';
@@ -40,13 +41,17 @@ export class AuthController {
 
 
   @Public()
-  @ResponseMessage("Get User{{ refresh")
+  @ResponseMessage("Get User by refresh_token")
   @Get('/refresh')
   handleRefreshToken(@Req() request:Request,
   @Res({passthrough:true}) response: Response ) { // req.user
     // console.log("check cookie",request.cookies);
-    // const refreshToken = 4;
-    const refreshToken = request.cookies['refresh_token'];
+    // const refreshToken = "acdss";
+    // const refreshToken = request.cookies["refresh_token"];
+    const refreshToken = request.cookies?.refresh_token;
+    if (!refreshToken) {
+      throw new UnauthorizedException('No refresh token provided');
+    }
     return this.authService.processNewToken(refreshToken,response);
   }
 

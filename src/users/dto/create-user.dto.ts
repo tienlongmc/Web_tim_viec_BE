@@ -1,6 +1,6 @@
 //data transfer object class = object
 import { Type } from 'class-transformer';
-import { IsEmail, IsNotEmpty, IsNotEmptyObject, IsObject, IsString, ValidateNested } from 'class-validator';
+import { IsEmail, IsMongoId, IsNotEmpty, IsNotEmptyObject, IsObject, IsString, ValidateNested } from 'class-validator';
 import mongoose from 'mongoose';
 
 class Company {
@@ -65,6 +65,7 @@ export class CreateUserDto {
             message: 'Role không được để trống'
         }
     )
+    @IsMongoId({message:'Role phải là kiểu mongoId'})
     role:string;
 
     @IsNotEmpty(
