@@ -18,9 +18,11 @@ import { MailModule } from './mail/mail.module';
 import { connect } from 'http2';
 import { connection } from 'mongoose';
 import { softDeletePlugin } from 'soft-delete-plugin-mongoose';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({

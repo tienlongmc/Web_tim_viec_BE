@@ -94,13 +94,15 @@ export class UsersService {
     }) // exclude >< include
   }
   findOneByUsername(username: string) {
+    console.log(this.userModel.findOne({
+      email: username
+    }
+    ));
+    
     return this.userModel.findOne({
       email: username
     }
-    ).populate({
-      path:"role",
-      select:{name:1}
-    })
+    )
   }
 
   IsValidPassword(password:string, hash:string){

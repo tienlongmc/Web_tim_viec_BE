@@ -14,6 +14,6 @@ import { Role, RoleSchema } from 'src/roles/schema/role.schema';
   ],
   controllers: [UsersController],
   providers: [UsersService],
-  exports:[UsersService,UsersModule] // để auth module có thể gọi được
+  exports:[UsersService,MongooseModule] // để auth module có thể gọi được
 })
 export class UsersModule {}

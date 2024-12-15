@@ -23,12 +23,16 @@ export class AuthService {
     //username vs password là 2 tham số thư viện passport ném về
     async validateUser(username: string, pass: string): Promise<any> {
         const user = await this.usersService.findOneByUsername(username);
+        console.log("user ben auth ser: ", user);
         
         if(user){
             const isValid = this.usersService.IsValidPassword(pass,user.password);
             if (isValid === true) {
                   // Chỉ cần kiểm tra isValid
                   const userRole = user.role as unknown as { _id: string, name: string };
+
+                  
+                  
                   const temp = await this.rolesService.findOne(userRole._id);
                    const objUser = {
                     ...user.toObject(),

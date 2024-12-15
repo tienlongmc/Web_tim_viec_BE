@@ -15,6 +15,7 @@ export class MailController {
     // private jobModel:SoftDeleteModel<JobDocument>
     @InjectModel('Job') private readonly jobModel: SoftDeleteModel<JobDocument>, // Đúng cách inject
     @InjectModel('User') private readonly userModel: SoftDeleteModel<UserDocument>,
+    
   ) {}
 
  
