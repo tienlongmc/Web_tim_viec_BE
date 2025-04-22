@@ -9,10 +9,12 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Job, JobSchema } from 'src/jobs/schema/job.schema';
 import { JobsModule } from 'src/jobs/jobs.module';
 import { UsersModule } from 'src/users/users.module';
-
-
+import { ScheduleModule } from '@nestjs/schedule';
 @Module({
   imports: [
+
+  ScheduleModule.forRoot(),
+  
   MailerModule.forRootAsync({
   useFactory: async (configService: ConfigService) => ({
       transport: {
@@ -33,7 +35,6 @@ import { UsersModule } from 'src/users/users.module';
   }),
   inject: [ConfigService],
   }),
-
   MongooseModule.forFeature([
     {name:Job.name,schema:JobSchema}
   ]),

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, Query } from '@nestjs/common';
 import { PermissionsService } from './permissions.service';
 import { CreatePermissionDto } from './dto/create-permission.dto';
 import { UpdatePermissionDto } from './dto/update-permission.dto';
@@ -18,12 +18,12 @@ export class PermissionsController {
   @Get()
   @ResponseMessage("Fetch permission with pagination")
   findAll(
-    @Param('page') page:string,
-    @Param('limit') limit:string,
-    @Param() qs:string
+   @Query('current') currentPage: number, // Tham số trang
+    @Query('pageSize') limit: number,  // Tham số giới hạn tài liệu
+    @Query() qs:string
 
   ) {
-    return this.permissionsService.findAll(+page,+limit,qs);
+    return this.permissionsService.findAll(+currentPage,+limit,qs);
   }
 
   @Get(':id')

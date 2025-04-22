@@ -31,11 +31,11 @@ export class PermissionsService {
     } ;
   }
 
-  async findAll(page: number,limit:number,qs:string) {
+  async findAll(currentPage: number,limit:number,qs:string) {
     const{filter,sort,population,projection} = aqp(qs);
     delete filter.current;
     delete filter.pageSize;
-    let offset = (+page - 1) * (+limit);
+    let offset = (+currentPage - 1) * (+limit);
     let defaultLimit = +limit ? +limit : 10;
 
     const totalItems = (await this.permissionModel.find(filter)).length;
@@ -49,7 +49,7 @@ export class PermissionsService {
     .exec();
    return {
     meta:{
-      current:page,
+      current:currentPage,
       pageSize:limit,
       pages:totalPages,
       total:totalItems

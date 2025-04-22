@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Res, BadRequestException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Res } from '@nestjs/common';
 import { JobsService } from './jobs.service';
 import { CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
@@ -20,11 +20,11 @@ export class JobsController {
   @Public()
   @ResponseMessage("Fetch list of jobs with pagination")
   findAll(
-    @Query('current') page: string,
+    @Query('current') currentPage: string,
     @Query('pageSize') limit: string,
     @Query() qs: string 
   ) {
-    return this.jobsService.findAll(+page,+limit,qs);
+    return this.jobsService.findAll(+currentPage,+limit,qs);
   }
 
   @Get(':id')
@@ -47,14 +47,6 @@ export class JobsController {
   remove(@Param('id') id: string, @User() user:IUser) {
     return this.jobsService.remove(id,user);
   }
-
-  // @Get('/search')
-  // @Public()
-  // @ResponseMessage("Search jobs")
-  // getJobs( @Query('skills') skills: string[],
-  // @Query('location') location: string,) {
-  // return this.jobsService.getJobs(skills,location);
-  // }
   @Post('search')
   @Public()
   @ResponseMessage("Searching jobs")
@@ -62,4 +54,5 @@ export class JobsController {
   // Xử lý logic tìm kiếm với body.skills và body.location
   return this.jobsService.getJobs(body.skills, body.location);
 }
+
 }

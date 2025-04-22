@@ -20,12 +20,13 @@ async function bootstrap() {
   app.setBaseViewsDir(join(__dirname, '..', 'view'));// view 
 
   app.setViewEngine('ejs');
-  app.useGlobalPipes(new ValidationPipe({whitelist:true}));
+  app.useGlobalPipes(new ValidationPipe());
 
   //config cookie
-  // app.use(cookieParser());
+  app.use(cookieParser());
   // const a = app.get(TransformInterceptor);
   app.useGlobalInterceptors(new TransformInterceptor(a));
+  
 // congif cors
   app.enableCors({
     "origin": true  , // cho phép nơi nào có thể kết nối tới

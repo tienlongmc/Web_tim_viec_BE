@@ -3,12 +3,15 @@ import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { Public, ResponseMessage, User } from 'src/decorator/customize';
 import { LocalAuthGuard } from './local-auth.guard';
-import { RegisterUserDto } from 'src/users/dto/create-user.dto';
+import { CodeAuthDto, RegisterUserDto } from 'src/users/dto/create-user.dto';
 // import { Request,response,Response } from 'express';
 import { IUser } from 'src/users/user.interface';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { request } from 'http';
 import { RolesService } from 'src/roles/roles.service';
+import { GoogleAuthGuard } from './google-auth/google-auth.guard';
+import { access } from 'fs';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller("auth")//route
 export class AuthController {
@@ -33,6 +36,13 @@ export class AuthController {
   @Post('/register')
   HandleRegister(@Body() registerUserDto : RegisterUserDto ) {
     return this.authService.register(registerUserDto);
+  }
+
+  @Public()
+  // @ResponseMessage("Register a new user")
+  @Post('/check-code')
+  checkCode(@Body() codeAuthDto : CodeAuthDto ) {
+    return this.authService.checkcode(codeAuthDto);
   }
 
   @ResponseMessage("Get User information")
@@ -65,4 +75,43 @@ export class AuthController {
   @Res({passthrough:true}) response: Response ) { // req.user
     return this.authService.logout(response,user);
   }
+
+  @Public()
+  @UseGuards(GoogleAuthGuard)
+  @Get("google/login")
+  googleLogin(){
+
+  }
+
+  @Public()
+  @UseGuards(GoogleAuthGuard)
+  @Get('google/callback')
+  async googleCallback(@Req() req,
+  @Res({ passthrough: true }) response: Response) {
+   const s=  await this.authService.login(req.user, response);
+   console.log("hihi1: ",req.user);
+    console.log("hihi: ",s);
+    if (s.user.isActive===false) {
+      return response.redirect(`http://localhost:3000/auth/verify/${s.user._id}`);
+  }
+    response.redirect(`http://localhost:3000?token=${s.access_token}`); 
+  }
+
+  @Public()
+  @Get('google')
+  @UseGuards(GoogleAuthGuard)
+    // @UseGuards(AuthGuard('google'))
+  async googleAuth(@Req() req) {}
+
+  @Public()
+  @Get("token")
+  async getAccessToken(@Req() req) {
+    const refreshToken = req.cookies['refresh_token'];
+    if (!refreshToken) {
+        throw new UnauthorizedException("No refresh token found");
+    }
+    return this.authService.refreshAccessToken(refreshToken);
+}
+
+  
 }

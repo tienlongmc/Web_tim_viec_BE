@@ -60,20 +60,9 @@ export class CreateUserDto {
     )
     address:string;
 
-    @IsNotEmpty(
-        {
-            message: 'Role không được để trống'
-        }
-    )
+    
     @IsMongoId({message:'Role phải là kiểu mongoId'})
     role:string;
-
-    @IsNotEmpty(
-        {
-            message: 'Role không được để trống'
-        }
-    )
-    refreshToken:string;
 
     @IsNotEmptyObject()
     @IsObject()
@@ -81,7 +70,13 @@ export class CreateUserDto {
     @Type(() => Company)
     company!: Company;
 }
+export class CodeAuthDto{
+    @IsNotEmpty({message:'_id khoong dduoc trong'})
+    _id: string;
 
+    @IsNotEmpty()
+    code: string
+}
 
 export class RegisterUserDto {
 
@@ -131,5 +126,6 @@ export class RegisterUserDto {
         }
     )
     address:string;
-
+    
+    avatar:string;
 }

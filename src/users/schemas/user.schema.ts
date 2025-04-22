@@ -63,6 +63,17 @@ export class User {
 
     @Prop()
     deletedAt: Date;
+
+
+    @Prop()
+    codeId: string;
+
+    @Prop()
+    isActive:boolean;
+
+    @Prop()
+    avatar:string;
+
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

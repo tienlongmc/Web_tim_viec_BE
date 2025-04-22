@@ -10,6 +10,8 @@ import { JwtStrategy } from './passport/jwt.strategy';
 import ms from 'ms';
 import { AuthController } from './auth.contronller';
 import { RolesModule } from 'src/roles/roles.module';
+import googleOauthConfig from './google/google-oauth.config';
+import { GoogleStrategy } from './passport/google.strategy';
 
 
 @Module({
@@ -24,8 +26,10 @@ import { RolesModule } from 'src/roles/roles.module';
       }),
       inject: [ConfigService],
     }),
+    ConfigModule.forFeature(googleOauthConfig)
+
   ],
-  providers: [AuthService,LocalStrategy,JwtStrategy],
+  providers: [AuthService,LocalStrategy,JwtStrategy,GoogleStrategy],
   exports:[AuthService],
   controllers: [AuthController],
 })

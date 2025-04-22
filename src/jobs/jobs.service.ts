@@ -28,12 +28,12 @@ export class JobsService {
     })
   }
 
-  async findAll(page:number,limit:number,qs:string) {
+  async findAll(currentPage:number,limit:number,qs:string) {
     const {filter,sort,population} = aqp(qs);
     delete filter.current;
     delete filter.pageSize;
 
-    let offset = (+page - 1) * limit;
+    let offset = (+currentPage - 1) * limit;
     let defaultLimit = +limit ? +limit : 10;
 
     const totalItems = (await this.JobModel.find(filter)).length;
@@ -48,7 +48,7 @@ export class JobsService {
 
       return {
         meta:{
-          current:page,
+          current:currentPage,
           pageSize:limit,
           pages:totalPages,
           total:totalItems
@@ -97,31 +97,30 @@ async  remove(id: string,user:IUser) {
   
   }
   async getJobs(skills:string[], location:string){
-      // Tạo bộ lọc động dựa trên đầu vào
-      const filter: any = {};
+    // Tạo bộ lọc động dựa trên đầu vào
+    const filter: any = {};
+    if (skills && skills.length > 0) {
+        filter.skills = { $all: skills }; // Kiểm tra các kỹ năng bắt buộc
+    }
 
-      if (skills && skills.length > 0) {
-          filter.skills = { $all: skills }; // Kiểm tra các kỹ năng bắt buộc
-      }
-  
-      if (location) {
-          filter.location = { $regex: new RegExp(location, 'i') }; // So khớp location không phân biệt hoa thường
-      }
-  
-      // Nếu không có bất kỳ điều kiện nào
-      if (Object.keys(filter).length === 0) {
-          throw new BadRequestException('Please provide at least one search criteria: skills or location');
-      }
-  
-      // Lọc công việc dựa trên filter
-      const filteredJobs = await this.JobModel.find(filter).exec();
-  
-      // Nếu không tìm thấy công việc nào
-      if (filteredJobs.length === 0) {
-          throw new BadRequestException('No jobs found matching the criteria');
-      }
-  
-      // Trả về danh sách công việc phù hợp
-      return filteredJobs;
-  }
+    if (location) {
+        filter.location = { $regex: new RegExp(location, 'i') }; // So khớp location không phân biệt hoa thường
+    }
+
+    // Nếu không có bất kỳ điều kiện nào
+    if (Object.keys(filter).length === 0) {
+        throw new BadRequestException('Please provide at least one search criteria: skills or location');
+    }
+
+    // Lọc công việc dựa trên filter
+    const filteredJobs = await this.JobModel.find(filter).exec();
+
+    // Nếu không tìm thấy công việc nào
+    if (filteredJobs.length === 0) {
+        throw new BadRequestException('No jobs found matching the criteria');
+    }
+
+    // Trả về danh sách công việc phù hợp
+    return filteredJobs;
+}
 }

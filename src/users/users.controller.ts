@@ -52,13 +52,23 @@ export class UsersController {
   }
 
   @ResponseMessage("Update a User")
-  @Patch()
-  update(@Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update( updateUserDto);
+  @Patch(':id')
+  update(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.update( id,updateUserDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string,@User() user:IUser) {
     return this.usersService.remove(id);
   }
+
+  // @Post('payment')
+  // payment(
+  //   res: Response
+  // )
+  // {return this.usersService.pay(res);
+
+  // }
 }
