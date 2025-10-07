@@ -16,6 +16,7 @@ import { RolesModule } from './roles/roles.module';
 import { DatabasesModule } from './databases/databases.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { MailModule } from './mail/mail.module';
+import { ManagementModule } from './management/management.module';
 
 @Module({
   imports: [
@@ -39,7 +40,8 @@ import { MailModule } from './mail/mail.module';
     PermissionsModule,
     RolesModule,
     DatabasesModule,
-    MailModule
+    MailModule,
+    ManagementModule
   ],
   controllers: [AppController],
   providers: [AppService,

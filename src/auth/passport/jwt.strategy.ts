@@ -12,20 +12,20 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), // lay token tu header
       ignoreExpiration: false,
-      secretOrKey : configService.get<string>("JWT_ACCESS_TOKEN")
+      secretOrKey: configService.get<string>("JWT_ACCESS_TOKEN")
     });
   }
 
   async validate(payload: IUser) {
     try {
-    const { _id, name, email, role,company,age,address } = payload; 
-    // req.user
-    return {
-    _id, name, email, role,company,age,address
-    };
-  } catch (error) {
-    throw new UnauthorizedException('Token validation failed');
-  }
+      const { _id, name, email, role, company, age, address, connected } = payload;
+      // req.user
+      return {
+        _id, name, email, role, company, age, address, connected
+      };
+    } catch (error) {
+      throw new UnauthorizedException('Token validation failed');
     }
-    
+  }
+
 }
