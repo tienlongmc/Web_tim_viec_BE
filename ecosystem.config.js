@@ -3,7 +3,7 @@ module.exports = {
     {
       name: 'web-tim-viec',
       script: 'dist/main.js',
-      instances: 'max',
+      instances: 1,
       exec_mode: 'cluster',
       watch: false,
       env: {
