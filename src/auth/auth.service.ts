@@ -66,6 +66,7 @@ export class AuthService {
         const userRole = user.role as unknown as { _id: string; name: string };
         const temp = await this.rolesService.findOne(userRole._id);
         const refreshTokenExpire = this.configService.get<string>('JWT_REFRESH_TOKEN_EXPIRE')!;
+        console.log('refreshTokenExpire: ', refreshTokenExpire);
         const maxAgeMs: number = ms(refreshTokenExpire as StringValue)!; // Chuyển đổi chuỗi thời gian thành milliseconds
         // set refreshtoken as cookies để server đọc được thôi
         response.cookie('refresh_token', refreshToken, {
