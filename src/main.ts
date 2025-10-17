@@ -35,10 +35,11 @@ async function bootstrap() {
   // CORS config
   app.enableCors({
     // origin: true,
-    origin: ['https://webtimviec.online'],
+    origin: ['https://webtimviec.online', 'http://localhost:3000'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     preflightContinue: false,
     optionsSuccessStatus: 204,
+    allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
   });
 
