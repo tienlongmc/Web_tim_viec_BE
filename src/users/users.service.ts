@@ -284,7 +284,7 @@ export class UsersService {
     try {
       const apiKey = this.configService.get<string>('STREAM_KEY');
       const apiSecret = this.configService.get<string>('STREAM_SECRET');
-
+      console.log("trinh la gi")
       if (!apiKey || !apiSecret) {
         console.error('Stream API key or secret is not set in environment variables');
         process.exit(1);
