@@ -35,7 +35,7 @@ async function bootstrap() {
   // CORS config
   app.enableCors({
     // origin: true,
-    origin: ['https://webtimviec.online', 'http://localhost:3000'],
+    origin: ['https://webtimviec.online', 'http://localhost:3000', 'https://webtimviecfe-ci183oc0w-kkao4s-projects.vercel.app'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     preflightContinue: false,
     optionsSuccessStatus: 204,
