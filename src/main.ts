@@ -34,7 +34,8 @@ async function bootstrap() {
 
   // CORS config
   app.enableCors({
-    origin: true,
+    // origin: true,
+    origin: ['https://webtimviec.online'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     preflightContinue: false,
     optionsSuccessStatus: 204,
