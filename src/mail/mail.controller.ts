@@ -11,23 +11,29 @@ import { Cron } from '@nestjs/schedule';
 import { ConfigService } from '@nestjs/config';
 @Controller('mail')
 export class MailController {
-  constructor(private readonly mailService: MailService,
+  constructor(
+    private readonly mailService: MailService,
     private mailerService: MailerService,
     private configService: ConfigService,
     // private jobModel:SoftDeleteModel<JobDocument>
     @InjectModel('Job') private readonly jobModel: SoftDeleteModel<JobDocument>, // Đúng cách inject
-    @InjectModel('User') private readonly userModel: SoftDeleteModel<UserDocument>,
-  ) { }
-
+    @InjectModel('User')
+    private readonly userModel: SoftDeleteModel<UserDocument>,
+  ) {}
 
   @Get()
   @Public()
-  @ResponseMessage("Test email")
+  @ResponseMessage('Test email')
   @Cron('39 9 * * 5')
   async handleTestEmail() {
-    const users = await this.userModel.find({ role: "675d22c722092d29f819f586" });
+    const users = await this.userModel.find({
+      role: '675d22c722092d29f819f586',
+    });
     if (!users || users.length === 0) {
-      return { message: 'Không có email nào được gửi đi vì không có người dùng phù hợp.' };
+      return {
+        message:
+          'Không có email nào được gửi đi vì không có người dùng phù hợp.',
+      };
     }
     const recentJobs = await this.jobModel
       .find()
@@ -53,7 +59,9 @@ export class MailController {
       });
       console.log(`Email đã được gửi tới ${user.email}`);
     }
-    return { message: 'Email đã được gửi tới tất cả người dùng có vai trò "user".' };
+    return {
+      message: 'Email đã được gửi tới tất cả người dùng có vai trò "user".',
+    };
     // await this.mailerService.sendMail({
     //   to: "letienlongmc2003@gmail.com",
     //   from: '"Support Team" <support@example.com>', // override default from
@@ -62,27 +70,26 @@ export class MailController {
     //   });
   }
 
-
   @Get('register')
   @Public()
   TestMail() {
     this.mailerService.sendMail({
-      to: "tienlongsuper2003@gmail.com",
+      to: 'tienlongsuper2003@gmail.com',
       from: '"TOP HIKING JOB" <support@example.com>',
       subject: 'Verify Code',
       template: 'register',
       context: {
-        name: "Eric",
-        activationCode: 123456
-      }
-    })
-    return "ok";
+        name: 'Eric',
+        activationCode: 123456,
+      },
+    });
+    return 'ok';
   }
 
   @Cron('*/10 * * * * *')
   handleCron() {
     const jwtSecret = this.configService.get<string>('JWT_ACCESS_TOKEN');
     // this.logger.log(`🔐 JWT_SECRET hiện tại là: ${jwtSecret}`);
-    console.log(`🔐 JWT_SECRET hiện tại là: ${jwtSecret}`);
+    // console.log(`🔐 JWT_SECRET hiện tại là: ${jwtSecret}`);
   }
 }

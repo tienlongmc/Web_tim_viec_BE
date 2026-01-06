@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  Put,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -17,7 +18,7 @@ import { IUser } from './user.interface';
 //controller dùng để phân phối và điều hướng tới những file khác
 @Controller('users') //=> /usersrs
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
 
   @ResponseMessage('create a new User')
   @Post('post_user')
@@ -60,12 +61,6 @@ export class UsersController {
     return foundUser; // +id = conver string -> numbere
   }
 
-  @ResponseMessage('Update a User')
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto);
-  }
-
   @Delete(':id')
   remove(@Param('id') id: string, @User() user: IUser) {
     return this.usersService.remove(id);
@@ -79,5 +74,16 @@ export class UsersController {
   @Get('listChat/connect')
   getChatList(@User() user: IUser) {
     return this.usersService.getChatList(user._id);
+  }
+
+  @Put('change-password')
+  changePassword(@User() user: IUser, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.changePassword(user._id, updateUserDto);
+  }
+
+  @ResponseMessage('Update a User')
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.update(id, updateUserDto);
   }
 }

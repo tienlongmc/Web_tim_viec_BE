@@ -13,6 +13,6 @@ export class crontest {
     handleCron() {
         const jwtSecret = this.configService.get<string>('JWT_ACCESS_TOKEN');
         // this.logger.log(`🔐 JWT_SECRET hiện tại là: ${jwtSecret}`);
-        console.log(`🔐 JWT_SECRET hiện tại là: ${jwtSecret}`);
+        // console.log(`🔐 JWT_SECRET hiện tại là: ${jwtSecret}`);
     }
 }

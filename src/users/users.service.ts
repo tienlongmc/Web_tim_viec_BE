@@ -29,8 +29,6 @@ import { ConfigService } from '@nestjs/config';
 // import { upsertStreamUser } from 'src/chat/stream-chat.service';
 import { StreamChat } from 'stream-chat';
 
-
-
 @Injectable()
 export class UsersService {
   constructor(
@@ -42,7 +40,7 @@ export class UsersService {
     // đặt kiểu type cho biến userModel là model của user trong monggodb
     private readonly mailerService: MailerService,
     private readonly configService: ConfigService,
-  ) { }
+  ) {}
 
   getHashPassword = (password: string) => {
     // var bcrypt = require('bcryptjs');
@@ -155,8 +153,6 @@ export class UsersService {
     );
   }
 
-
-
   async remove(id: string) {
     //
     if (!mongoose.Types.ObjectId.isValid(id)) return 'not found user';
@@ -258,13 +254,19 @@ export class UsersService {
     return user;
   }
 
-  async upsertStreamUser(userData: { id: string; name?: string; image?: string }) {
+  async upsertStreamUser(userData: {
+    id: string;
+    name?: string;
+    image?: string;
+  }) {
     try {
       const apiKey = this.configService.get<string>('STREAM_KEY');
       const apiSecret = this.configService.get<string>('STREAM_SECRET');
 
       if (!apiKey || !apiSecret) {
-        console.error('Stream API key or secret is not set in environment variables');
+        console.error(
+          'Stream API key or secret is not set in environment variables',
+        );
         process.exit(1);
       }
 
@@ -284,9 +286,11 @@ export class UsersService {
     try {
       const apiKey = this.configService.get<string>('STREAM_KEY');
       const apiSecret = this.configService.get<string>('STREAM_SECRET');
-      console.log("trinh la gi")
+      // console.log("trinh la gi")
       if (!apiKey || !apiSecret) {
-        console.error('Stream API key or secret is not set in environment variables');
+        console.error(
+          'Stream API key or secret is not set in environment variables',
+        );
         process.exit(1);
       }
 
@@ -299,17 +303,33 @@ export class UsersService {
   }
 
   async getChatList(userId: string) {
-    console.log("oi", userId)
-    const user = await this.UserModel
-      .findById(userId)
-      .populate("connected", "_id name avatar email") // join sang User để lấy field mong muốn
+    console.log('oi', userId);
+    const user = await this.UserModel.findById(userId)
+      .populate('connected', '_id name avatar email') // join sang User để lấy field mong muốn
       .exec();
-    console.log("oi", user)
+    console.log('oi', user);
     if (!user) {
-      throw new NotFoundException("User not found");
+      throw new NotFoundException('User not found');
     }
 
     return user.connected;
   }
-
+  async changePassword(userId: string, updateUserDto: UpdateUserDto) {
+    const user = await this.UserModel.findById(userId);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    // const { password } = updateUserDto;
+    const isvaid = this.IsValidPassword(
+      updateUserDto.old_password,
+      user.password,
+    );
+    if (isvaid === false) {
+      throw new BadRequestException('Mật khẩu cũ không đúng');
+    }
+    const newHasPassword = this.getHashPassword(updateUserDto.new_password);
+    user.password = newHasPassword;
+    await user.save();
+    return { message: 'Đổi mật khẩu thành công' };
+  }
 }
