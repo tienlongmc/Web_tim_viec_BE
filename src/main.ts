@@ -40,6 +40,7 @@ async function bootstrap() {
       'http://localhost:3000',
       'https://webtimviecfe.vercel.app',
       'https://timviecfe.vercel.app',
+      'https://webtimviecfev2.vercel.app',
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     preflightContinue: false,
