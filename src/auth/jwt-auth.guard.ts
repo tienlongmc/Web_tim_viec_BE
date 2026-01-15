@@ -9,9 +9,12 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         super();
       }
       canActivate(context: ExecutionContext) {
-    //       if (request.method === 'OPTIONS') {
-    //   return true;
-    // }
+   const request = context.switchToHttp().getRequest();
+
+  // ✅ CHO OPTIONS QUA (CORS preflight)
+  if (request.method === 'OPTIONS') {
+    return true;
+  }
         const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
           context.getHandler(),
           context.getClass(),
