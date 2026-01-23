@@ -13,7 +13,7 @@ export class FilesController {
 
   @Post('upload')
   @ResponseMessage("Upload a file")
-  @UseInterceptors(FileInterceptor('file',
+  @UseInterceptors(FileInterceptor('fileUpload',
     {
       storage: diskStorage({
         // ✅ Lưu file vào thư mục "resume" thay vì "default"
