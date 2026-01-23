@@ -14,6 +14,7 @@ require('dotenv').config();
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  app.disable('etag'); 
   const configService = app.get(ConfigService);
   const reflector = app.get(Reflector);
     app.use((req, res, next) => {
@@ -31,7 +32,7 @@ async function bootstrap() {
 
   // Global pipes & interceptors
   app.useGlobalPipes(new ValidationPipe());
-  // app.useGlobalInterceptors(new TransformInterceptor(reflector));
+  app.useGlobalInterceptors(new TransformInterceptor(reflector));
 
   // Cookie parser
   app.use(cookieParser());
