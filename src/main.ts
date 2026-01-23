@@ -47,33 +47,10 @@ async function bootstrap() {
   //   credentials: true,
   // });
 app.enableCors({
-  origin: (origin, callback) => {
-    if (!origin) return callback(null, true);
-
-    if (
-      origin === 'https://webtimviec.online' ||
-      origin === 'http://localhost:3000' ||
-      origin.endsWith('.vercel.app')
-    ) {
-      return callback(null, true);
-    }
-
-    return callback(new Error('Not allowed by CORS'));
-  },
-
+  origin: true,
   credentials: true,
-
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-
-  allowedHeaders: [
-    'Content-Type',
-    'Authorization',
-    'folder_type',
-    'Accept',
-  ],
-
-  optionsSuccessStatus: 204,
 });
+
 
 
 
