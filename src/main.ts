@@ -46,10 +46,7 @@ async function bootstrap() {
   //   allowedHeaders: ['Content-Type', 'Authorization', 'folder_type'],
   //   credentials: true,
   // });
-app.enableCors({
-  origin: true,
-  credentials: true,
-});
+
 
 
 
