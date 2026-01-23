@@ -15,10 +15,10 @@ require('dotenv').config();
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.disable('etag'); 
-    app.enableCors({
-    origin: '*',
-    credentials: true,
-  });
+  //   app.enableCors({
+  //   origin: '*',
+  //   credentials: true,
+  // });
    app.use((req, res, next) => {
     res.setHeader('Cache-Control', 'no-store');
     next();
