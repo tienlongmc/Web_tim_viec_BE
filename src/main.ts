@@ -16,12 +16,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.disable('etag'); 
   app.enableCors({
-    origin: [
-      'https://webtimviecfev2.vercel.app/',
-      'https://webtimviecfev2.vercel.app',
-      'https://webtimviec.online',
-      'http://localhost:3000',
-    ],
+    origin:true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: [
       'Content-Type',
