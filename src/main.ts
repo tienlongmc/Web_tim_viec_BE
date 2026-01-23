@@ -16,27 +16,27 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.disable('etag'); 
 
-  app.enableCors({
-  origin: [
-    'https://webtimviec.online',
-    'http://localhost:3000',
-    /\.vercel\.app$/,
-  ],
+//   app.enableCors({
+//   origin: [
+//     'https://webtimviec.online',
+//     'http://localhost:3000',
+//     /\.vercel\.app$/,
+//   ],
 
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+//   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
 
-  allowedHeaders: [
-    'Content-Type',
-    'Authorization',
-    'folder_type',
-    'Accept',
-  ],
+//   allowedHeaders: [
+//     'Content-Type',
+//     'Authorization',
+//     'folder_type',
+//     'Accept',
+//   ],
 
-  // ❌ KHÔNG credentials vì bạn không dùng cookie
-  // credentials: true,
+//   // ❌ KHÔNG credentials vì bạn không dùng cookie
+//   // credentials: true,
 
-  optionsSuccessStatus: 204,
-});
+//   optionsSuccessStatus: 204,
+// });
   
   
   const configService = app.get(ConfigService);
