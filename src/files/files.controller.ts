@@ -43,7 +43,7 @@ export class FilesController {
   ) file: Express.Multer.File) {
     return {
       fileName: file.filename,
-      path: `/public/images/${file.filename}`, // Trả về đường dẫn file
+      path: `/public/images/resume/${file.filename}`, // Trả về đường dẫn file
     }
   }
 
