@@ -46,6 +46,7 @@ export class JobsService {
         email: user.email,
       },
     });
+     return newJob;
   }
 
   async findAll(currentPage: number, limit: number, qs: string) {
