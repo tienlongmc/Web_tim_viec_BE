@@ -60,7 +60,7 @@ async function bootstrap() {
 // });
   
   // mới
-  // const configService = app.get(ConfigService);
+  const configService = app.get(ConfigService);
   // const reflector = app.get(Reflector);
   //   app.use((req, res, next) => {
   //   res.setHeader('Cache-Control', 'no-store');
