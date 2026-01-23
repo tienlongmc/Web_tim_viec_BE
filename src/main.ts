@@ -65,9 +65,6 @@ app.enableCors({
 
     return callback(new Error('Not allowed by CORS'));
   },
-
-  credentials: true,
-
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
 
   allowedHeaders: [
