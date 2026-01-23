@@ -46,44 +46,49 @@ async function bootstrap() {
   //   allowedHeaders: ['Content-Type', 'Authorization', 'folder_type'],
   //   credentials: true,
   // });
+// app.enableCors({
+//   origin: (origin, callback) => {
+//     if (!origin) return callback(null, true);
+
+//     const allowList = [
+//       'https://webtimviec.online',
+//       'https://webtimviecfev2.vercel.app',
+//       'http://localhost:3000',
+//     ];
+
+//     if (
+//       allowList.includes(origin) ||
+//       origin.endsWith('.vercel.app')
+//     ) {
+//       return callback(null, true);
+//     }
+
+//     return callback(new Error('Not allowed by CORS'));
+//   },
+
+//   credentials: true,
+
+//   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+
+//   allowedHeaders: [
+//     'Content-Type',
+//     'Authorization',
+//     'folder_type', // 👈 cái gây lỗi upload của bạn
+//     'Accept',
+//   ],
+
+//   optionsSuccessStatus: 204,
+// });
+
 app.enableCors({
-  origin: (origin, callback) => {
-    if (!origin) return callback(null, true);
-
-    const allowList = [
-      'https://webtimviec.online',
-      'https://webtimviecfev2.vercel.app',
-      'http://localhost:3000',
-    ];
-
-    if (
-      allowList.includes(origin) ||
-      origin.endsWith('.vercel.app')
-    ) {
-      return callback(null, true);
-    }
-
-    return callback(new Error('Not allowed by CORS'));
-  },
-
-  credentials: true,
-
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-
-  allowedHeaders: [
-    'Content-Type',
-    'Authorization',
-    'folder_type', // 👈 cái gây lỗi upload của bạn
-    'Accept',
-  ],
-
-  optionsSuccessStatus: 204,
-});
-
-
-
-
-
+    // origin: true,
+    origin: ['https://webtimviec.online', 'http://localhost:3000', 'https://webtimviecfev2.vercel.app', 'https://timviecfe.vercel.app'],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+    allowedHeaders: ['Content-Type', 'Authorization', 'folder_type'],
+    credentials: true,
+  });
   // Global prefix & API versioning
   app.setGlobalPrefix('api');
   app.enableVersioning({
