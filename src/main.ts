@@ -15,20 +15,9 @@ require('dotenv').config();
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.disable('etag'); 
-  app.enableCors({
-   origin: [
-    'https://webtimviecfev2.vercel.app',
-    'https://api.webtimviec.online',
-  ],
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: [
-    'Content-Type',
-    'Authorization',
-    'Accept',
-    'folder_type',
-  ],
-  credentials: false,
-  optionsSuccessStatus: 204,
+    app.enableCors({
+    origin: '*',
+    credentials: true,
   });
    app.use((req, res, next) => {
     res.setHeader('Cache-Control', 'no-store');
