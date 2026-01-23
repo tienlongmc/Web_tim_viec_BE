@@ -15,7 +15,28 @@ require('dotenv').config();
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.disable('etag'); 
+  app.enableCors({
+    origin: [
+      'https://webtimviecfev2.vercel.app',
+      'https://webtimviec.online',
+      'http://localhost:3000',
+    ],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: [
+      'Content-Type',
+      'Authorization',
+      'Accept',
+      'folder_type',
+    ],
+    credentials: false, // ❗ không dùng cookie auth
+    optionsSuccessStatus: 204,
+  });
+   app.use((req, res, next) => {
+    res.setHeader('Cache-Control', 'no-store');
+    next();
+  });
 
+  const reflector = app.get(Reflector);
 //   app.enableCors({
 //   origin: [
 //     'https://webtimviec.online',
@@ -38,13 +59,14 @@ async function bootstrap() {
 //   optionsSuccessStatus: 204,
 // });
   
-  
-  const configService = app.get(ConfigService);
-  const reflector = app.get(Reflector);
-    app.use((req, res, next) => {
-    res.setHeader('Cache-Control', 'no-store');
-    next();
-  });
+  // mới
+  // const configService = app.get(ConfigService);
+  // const reflector = app.get(Reflector);
+  //   app.use((req, res, next) => {
+  //   res.setHeader('Cache-Control', 'no-store');
+  //   next();
+  // });
+  //đến đây
 
   // JWT Guard
   app.useGlobalGuards(new JwtAuthGuard(reflector));
@@ -55,7 +77,14 @@ async function bootstrap() {
   app.setViewEngine('ejs');
 
   // Global pipes & interceptors
-  app.useGlobalPipes(new ValidationPipe());
+  // app.useGlobalPipes(new ValidationPipe());
+    app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
   app.useGlobalInterceptors(new TransformInterceptor(reflector));
 
   // Cookie parser
