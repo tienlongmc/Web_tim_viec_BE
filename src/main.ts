@@ -33,19 +33,19 @@ async function bootstrap() {
   app.use(cookieParser());
 
   // CORS config
-  // app.enableCors({
-  //   // origin: true,
-  //   origin: [
-  //     'https://webtimviec.online',
-  //     'http://localhost:3000',
-  //     'https://webtimviecfev2.vercel.app',
-  //   ],
-  //   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-  //   preflightContinue: false,
-  //   optionsSuccessStatus: 204,
-  //   allowedHeaders: ['Content-Type', 'Authorization', 'folder_type'],
-  //   credentials: true,
-  // });
+  app.enableCors({
+    // origin: true,
+    origin: [
+      'https://webtimviec.online',
+      'http://localhost:3000',
+      'https://webtimviecfev2.vercel.app',
+    ],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    // preflightContinue: false,
+    // optionsSuccessStatus: 204,
+    allowedHeaders: ['Content-Type', 'Authorization', 'folder_type'],
+    credentials: true,
+  });
 //   app.enableCors({
 //   origin: (origin, callback) => {
 //     // allow server-to-server & curl
