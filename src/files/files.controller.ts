@@ -29,18 +29,20 @@ export class FilesController {
   ),
   )
   uploadFile(@UploadedFile(
-    new ParseFilePipeBuilder()
-      // .addFileTypeValidator({
-      //   fileType: /^(jpg|image\/jpeg|jpeg|png|image\/png|gif|txt|pdf|application\/pdf|doc|docx|text\/plain)$/i,
-      // })
-      .addMaxSizeValidator({
-        maxSize: 10 * 1024 * 1024 //kb
-      })
-      .build({
-        errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY // ma loi 422
-      }),
+     
+    // new ParseFilePipeBuilder()
+    //   // .addFileTypeValidator({
+    //   //   fileType: /^(jpg|image\/jpeg|jpeg|png|image\/png|gif|txt|pdf|application\/pdf|doc|docx|text\/plain)$/i,
+    //   // })
+    //   .addMaxSizeValidator({
+    //     maxSize: 10 * 1024 * 1024 //kb
+    //   })
+    //   .build({
+    //     errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY // ma loi 422
+    //   }),
 
   ) file: Express.Multer.File) {
+    console.log(file);
     return {
       fileName: file.filename,
       path: `/public/images/resume/${file.filename}`, // Trả về đường dẫn file
