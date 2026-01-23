@@ -114,10 +114,10 @@ export class AuthController {
     // console.log('hihi: ', s);
     if (s.user.isActive === false) {
       return response.redirect(
-        `http://localhost:3000/auth/verify/${s.user._id}`,
+        `https://webtimviecfev2.vercel.app/auth/verify/${s.user._id}`,
       );
     }
-    response.redirect(`http://localhost:3000?token=${s.access_token}`);
+    response.redirect(`https://webtimviecfev2.vercel.app?token=${s.access_token}`);
   }
 
   @Public()
