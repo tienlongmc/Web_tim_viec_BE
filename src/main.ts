@@ -31,7 +31,7 @@ async function bootstrap() {
 
   // Global pipes & interceptors
   app.useGlobalPipes(new ValidationPipe());
-  app.useGlobalInterceptors(new TransformInterceptor(reflector));
+  // app.useGlobalInterceptors(new TransformInterceptor(reflector));
 
   // Cookie parser
   app.use(cookieParser());
