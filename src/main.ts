@@ -46,6 +46,39 @@ async function bootstrap() {
   //   allowedHeaders: ['Content-Type', 'Authorization', 'folder_type'],
   //   credentials: true,
   // });
+app.enableCors({
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+
+    const allowList = [
+      'https://webtimviec.online',
+      'https://webtimviecfev2.vercel.app',
+      'http://localhost:3000',
+    ];
+
+    if (
+      allowList.includes(origin) ||
+      origin.endsWith('.vercel.app')
+    ) {
+      return callback(null, true);
+    }
+
+    return callback(new Error('Not allowed by CORS'));
+  },
+
+  credentials: true,
+
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+
+  allowedHeaders: [
+    'Content-Type',
+    'Authorization',
+    'folder_type', // 👈 cái gây lỗi upload của bạn
+    'Accept',
+  ],
+
+  optionsSuccessStatus: 204,
+});
 
 
 
