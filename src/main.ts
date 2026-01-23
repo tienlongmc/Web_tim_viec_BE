@@ -16,6 +16,10 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const configService = app.get(ConfigService);
   const reflector = app.get(Reflector);
+    app.use((req, res, next) => {
+    res.setHeader('Cache-Control', 'no-store');
+    next();
+  });
 
   // JWT Guard
   app.useGlobalGuards(new JwtAuthGuard(reflector));
