@@ -13,7 +13,7 @@ export class FilesController {
 
   @Post('upload')
   @ResponseMessage("Upload a file")
-  @UseInterceptors(FileInterceptor('fileUpload',
+  @UseInterceptors(FileInterceptor('file',
     {
       storage: diskStorage({
         // ✅ Lưu file vào thư mục "resume" thay vì "default"
@@ -34,7 +34,7 @@ export class FilesController {
         fileType: /^(jpg|image\/jpeg|jpeg|png|image\/png|gif|txt|pdf|application\/pdf|doc|docx|text\/plain)$/i,
       })
       .addMaxSizeValidator({
-        maxSize: 1024 * 1024 //kb
+        maxSize: 10 * 1024 * 1024 //kb
       })
       .build({
         errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY // ma loi 422
