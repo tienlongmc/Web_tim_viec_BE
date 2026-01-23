@@ -38,6 +38,7 @@ async function bootstrap() {
   optionsSuccessStatus: 204,
 });
   
+  
   const configService = app.get(ConfigService);
   const reflector = app.get(Reflector);
     app.use((req, res, next) => {
@@ -46,7 +47,7 @@ async function bootstrap() {
   });
 
   // JWT Guard
-  app.useGlobalGuards(new JwtAuthGuard(reflector));
+  // app.useGlobalGuards(new JwtAuthGuard(reflector));
 
   // Static files & views
   app.useStaticAssets(join(__dirname, '..', 'public')); // truy cập js, css, img
