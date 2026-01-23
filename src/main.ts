@@ -17,6 +17,7 @@ async function bootstrap() {
   app.disable('etag'); 
   app.enableCors({
     origin: [
+      'https://webtimviecfev2.vercel.app/',
       'https://webtimviecfev2.vercel.app',
       'https://webtimviec.online',
       'http://localhost:3000',
