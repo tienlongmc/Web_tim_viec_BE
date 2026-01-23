@@ -60,15 +60,6 @@ app.enableCors({
       'http://localhost:3000',
     ];
 
-    if (
-      allowList.includes(origin) ||
-      origin.endsWith('.vercel.app')
-    ) {
-      return callback(null, true);
-    }
-
-    return callback(new Error('Not allowed by CORS'));
-  },
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
 
   allowedHeaders: [
