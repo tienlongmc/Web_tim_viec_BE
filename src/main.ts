@@ -33,21 +33,55 @@ async function bootstrap() {
   app.use(cookieParser());
 
   // CORS config
+  // app.enableCors({
+  //   // origin: true,
+  //   origin: [
+  //     'https://webtimviec.online',
+  //     'http://localhost:3000',
+  //     'https://webtimviecfev2.vercel.app',
+  //   ],
+  //   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+  //   preflightContinue: false,
+  //   optionsSuccessStatus: 204,
+  //   allowedHeaders: ['Content-Type', 'Authorization', 'folder_type'],
+  //   credentials: true,
+  // });
   app.enableCors({
-    // origin: true,
-    origin: [
+  origin: (origin, callback) => {
+    // allow server-to-server & curl
+    if (!origin) return callback(null, true);
+
+    const allowList = [
       'https://webtimviec.online',
       'http://localhost:3000',
-      'https://webtimviecfe.vercel.app',
-      'https://timviecfe.vercel.app',
-      'https://webtimviecfev2.vercel.app',
-    ],
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
-    allowedHeaders: ['Content-Type', 'Authorization', 'folder_type'],
-    credentials: true,
-  });
+    ];
+
+    // allow all vercel preview domains
+    if (
+      allowList.includes(origin) ||
+      origin.endsWith('.vercel.app')
+    ) {
+      return callback(null, true);
+    }
+
+    return callback(new Error('Not allowed by CORS'));
+  },
+
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+  credentials: true,
+
+  allowedHeaders: [
+    'Content-Type',
+    'Authorization',
+    'folder_type',
+    'Accept',
+    'X-Requested-With',
+  ],
+
+  exposedHeaders: ['Content-Disposition'],
+  optionsSuccessStatus: 204,
+});
+
 
   // Global prefix & API versioning
   app.setGlobalPrefix('api');
