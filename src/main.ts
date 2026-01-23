@@ -33,54 +33,48 @@ async function bootstrap() {
   app.use(cookieParser());
 
   // CORS config
-  app.enableCors({
-    // origin: true,
-    origin: [
-      'https://webtimviec.online',
-      'http://localhost:3000',
-      'https://webtimviecfev2.vercel.app',
-    ],
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    // preflightContinue: false,
-    // optionsSuccessStatus: 204,
-    allowedHeaders: ['Content-Type', 'Authorization', 'folder_type'],
-    credentials: true,
-  });
-//   app.enableCors({
-//   origin: (origin, callback) => {
-//     // allow server-to-server & curl
-//     if (!origin) return callback(null, true);
+  // app.enableCors({
+  //   // origin: true,
+  //   origin: [
+  //     'https://webtimviec.online',
+  //     'http://localhost:3000',
+  //     'https://webtimviecfev2.vercel.app',
+  //   ],
+  //   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+  //   // preflightContinue: false,
+  //   // optionsSuccessStatus: 204,
+  //   allowedHeaders: ['Content-Type', 'Authorization', 'folder_type'],
+  //   credentials: true,
+  // });
+app.enableCors({
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
 
-//     const allowList = [
-//       'https://webtimviec.online',
-//       'http://localhost:3000',
-//     ];
+    if (
+      origin === 'https://webtimviec.online' ||
+      origin === 'http://localhost:3000' ||
+      origin.endsWith('.vercel.app')
+    ) {
+      return callback(null, true);
+    }
 
-//     // allow all vercel preview domains
-//     if (
-//       allowList.includes(origin) ||
-//       origin.endsWith('.vercel.app')
-//     ) {
-//       return callback(null, true);
-//     }
+    return callback(new Error('Not allowed by CORS'));
+  },
 
-//     return callback(new Error('Not allowed by CORS'));
-//   },
+  credentials: true,
 
-//   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-//   credentials: true,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
 
-//   allowedHeaders: [
-//     'Content-Type',
-//     'Authorization',
-//     'folder_type',
-//     'Accept',
-//     'X-Requested-With',
-//   ],
+  allowedHeaders: [
+    'Content-Type',
+    'Authorization',
+    'folder_type',
+    'Accept',
+  ],
 
-//   exposedHeaders: ['Content-Disposition'],
-//   optionsSuccessStatus: 204,
-// });
+  optionsSuccessStatus: 204,
+});
+
 
 
   // Global prefix & API versioning
