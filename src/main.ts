@@ -19,6 +19,16 @@ async function bootstrap() {
   //   origin: '*',
   //   credentials: true,
   // });
+  app.enableCors({
+  origin: [
+    'https://webtimviecfev2.vercel.app',
+    'http://localhost:3000',
+  ],
+  methods: ['POST', 'OPTIONS'], // chỉ cần cho upload
+  allowedHeaders: ['Content-Type', 'Authorization', 'folder_type'],
+  credentials: false,
+});
+
    app.use((req, res, next) => {
     res.setHeader('Cache-Control', 'no-store');
     next();
