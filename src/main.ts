@@ -47,7 +47,7 @@ async function bootstrap() {
   });
 
   // JWT Guard
-  // app.useGlobalGuards(new JwtAuthGuard(reflector));
+  app.useGlobalGuards(new JwtAuthGuard(reflector));
 
   // Static files & views
   app.useStaticAssets(join(__dirname, '..', 'public')); // truy cập js, css, img
