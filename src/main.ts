@@ -16,16 +16,8 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.disable('etag'); 
   app.enableCors({
-    origin:true,
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: [
-      'Content-Type',
-      'Authorization',
-      'Accept',
-      'folder_type',
-    ],
-    credentials: false, // ❗ không dùng cookie auth
-    optionsSuccessStatus: 204,
+    origin: true, // ✅ TỰ ĐỘNG reflect Origin
+  credentials: false,
   });
    app.use((req, res, next) => {
     res.setHeader('Cache-Control', 'no-store');
