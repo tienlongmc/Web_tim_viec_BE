@@ -46,41 +46,41 @@ async function bootstrap() {
   //   allowedHeaders: ['Content-Type', 'Authorization', 'folder_type'],
   //   credentials: true,
   // });
-  app.enableCors({
-  origin: (origin, callback) => {
-    // allow server-to-server & curl
-    if (!origin) return callback(null, true);
+//   app.enableCors({
+//   origin: (origin, callback) => {
+//     // allow server-to-server & curl
+//     if (!origin) return callback(null, true);
 
-    const allowList = [
-      'https://webtimviec.online',
-      'http://localhost:3000',
-    ];
+//     const allowList = [
+//       'https://webtimviec.online',
+//       'http://localhost:3000',
+//     ];
 
-    // allow all vercel preview domains
-    if (
-      allowList.includes(origin) ||
-      origin.endsWith('.vercel.app')
-    ) {
-      return callback(null, true);
-    }
+//     // allow all vercel preview domains
+//     if (
+//       allowList.includes(origin) ||
+//       origin.endsWith('.vercel.app')
+//     ) {
+//       return callback(null, true);
+//     }
 
-    return callback(new Error('Not allowed by CORS'));
-  },
+//     return callback(new Error('Not allowed by CORS'));
+//   },
 
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-  credentials: true,
+//   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+//   credentials: true,
 
-  allowedHeaders: [
-    'Content-Type',
-    'Authorization',
-    'folder_type',
-    'Accept',
-    'X-Requested-With',
-  ],
+//   allowedHeaders: [
+//     'Content-Type',
+//     'Authorization',
+//     'folder_type',
+//     'Accept',
+//     'X-Requested-With',
+//   ],
 
-  exposedHeaders: ['Content-Disposition'],
-  optionsSuccessStatus: 204,
-});
+//   exposedHeaders: ['Content-Disposition'],
+//   optionsSuccessStatus: 204,
+// });
 
 
   // Global prefix & API versioning
